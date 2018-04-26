@@ -1,0 +1,90 @@
+
+CREATE OR REPLACE FUNCTION function_1(A IN NUMBER, B IN NUMBER, C IN NUMBER)
+RETURN VARCHAR2 IS
+BEGIN
+  IF B >= C THEN
+   RETURN CONCAT(CONCAT(CONCAT(A,'/'),(A*B)),'/MARTINEZ');
+  ELSE
+   RETURN CONCAT(CONCAT(CONCAT(A,'/'),(A*B)),'/ANDRES');
+  END IF;
+END;
+
+
+CREATE OR REPLACE FUNCTION function_2(A IN NUMBER, B IN VARCHAR2, C IN VARCHAR2)
+RETURN VARCHAR2 IS  
+BEGIN
+  DECLARE
+      /*Char a*/
+      n number;
+      m number;
+      rev number:=0;
+      r number; 
+      isPalind boolean;
+      
+      tam1 number:=0;
+      tam2 number:=0;
+      tam3 number:=0;
+      
+      /*Char b*/
+      letra VARCHAR(255);      
+      charConcat VARCHAR2(255);
+      solution VARCHAR2(255);
+      sw boolean :=false;
+      
+      numberVowels number := 0;
+  BEGIN
+    tam1 := LENGTH(A);
+    tam2 := LENGTH(B);
+    tam3 := LENGTH(C);
+    /*Char a*/
+      n:=A;
+      m:=n;
+      
+      while n>0
+      loop
+          r:=mod(n,10);
+          rev:=(rev*10)+r;
+          n:=trunc(n/10);
+      end loop;
+      
+      if m=rev
+      then
+          isPalind := true;
+      else
+          isPalind := false;
+      end if;
+      
+      
+    /*Char b*/
+    letra := '';
+    charConcat := '';
+      for i in 1..LENGTH(B) loop
+            letra := SUBSTR(B, i, 1);
+            begin
+            if sw then
+              charConcat := CONCAT(charConcat,UPPER(letra));
+            else
+              charConcat := CONCAT(charConcat,LOWER(letra));
+            end if;
+            sw := not sw;
+            end;
+        end loop; 
+        
+        for i in 1..LENGTH(C) loop
+            letra := SUBSTR(C, i, 1);
+            begin
+            if (letra like 'a' or letra like 'e' or letra like 'i' or letra like 'o' or letra like 'au') then
+              numberVowels := numberVowels +1;
+            end if;
+            end;
+        end loop;      
+        solution := CONCAT(isPalind,'/');
+        solution := CONCAT(solution,charconcat);        
+        solution := CONCAT(solution,'/');      
+        solution := CONCAT(solution,numberVowels);      
+        solution := CONCAT(solution,'/');      
+        solution := CONCAT(solution,(tam1+tam2+tam3));
+
+     return (solution);
+  END;  
+END;
